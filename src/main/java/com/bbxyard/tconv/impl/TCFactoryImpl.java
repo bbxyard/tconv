@@ -1,4 +1,4 @@
-package com.bbxyard.tconv.imp;
+package com.bbxyard.tconv.impl;
 
 public class TCFactoryImpl {
 
