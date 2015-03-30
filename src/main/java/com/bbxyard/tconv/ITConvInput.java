@@ -1,5 +1,6 @@
 package com.bbxyard.tconv;
 
-public class ITConvInput {
-
+public interface ITConvInput {
+	ITConvDocument parseFile(String file, TConvParam param);
+	ITConvDocument parseContent(String content, TConvParam param);
 }
