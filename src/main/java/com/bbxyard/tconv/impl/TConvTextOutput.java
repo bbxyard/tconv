@@ -8,13 +8,13 @@ import java.io.UnsupportedEncodingException;
 
 import com.bbxyard.tconv.ITConvDocument;
 import com.bbxyard.tconv.ITConvOutput;
-import com.bbxyard.tconv.TConvParam;
+import com.bbxyard.tconv.TConvOption;
 
 public class TConvTextOutput implements ITConvOutput {
 
-	public int saveFile(ITConvDocument doc, String file, TConvParam param) {
+	public int saveFile(ITConvDocument doc, String file, TConvOption opt) {
 		StringBuffer sb = new StringBuffer();
-		int ret = saveContent(doc, sb, param);
+		int ret = saveContent(doc, sb, opt);
 		if (0 == ret) {
 			FileOutputStream fos;
 			try {
@@ -36,7 +36,7 @@ public class TConvTextOutput implements ITConvOutput {
 		return ret;
 	}
 
-	public int saveContent(ITConvDocument doc, StringBuffer sb, TConvParam param) {
+	public int saveContent(ITConvDocument doc, StringBuffer sb, TConvOption opt) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

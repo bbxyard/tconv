@@ -1,6 +1,7 @@
 package com.bbxyard.tconv;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -15,24 +16,66 @@ public class TConvOption {
 		attrMap = new HashMap<String, String>();
 	}
 	
+	class OptionNode {
+		public OptionNode(String sname, String lname, boolean withArg, String desc, String defValue) {
+			this.sname 		= sname;
+			this.lname		= lname;
+			this.withArg 	= withArg;
+			this.desc		= desc;
+			this.defValue	= defValue;
+		}
+		public String	sname;
+		public String	lname;
+		public boolean	withArg;
+		public String	desc;
+		public String 	defValue;
+	}
+	
+	class OptionNodeArray extends Vector<OptionNode> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1607717610169488429L;
+		
+		public void fill(Options opt) {
+			for (OptionNode node : this) {
+				opt.addOption(node.sname, node.lname, node.withArg, node.desc);
+			}
+		}
+		
+		public void visit(CommandLine cmdline, HashMap<String, String> attrMap) {
+			for (OptionNode node : this) {
+				if (cmdline.hasOption(node.sname) || cmdline.hasOption(node.lname)) {
+					attrMap.put(node.lname, cmdline.getOptionValue(node.lname));
+				} else {
+					attrMap.put(node.lname, node.defValue);
+				}
+			}			
+		}
+	}
+	
 	public TConvOption() {
-		opt = new Options();
+		ona = new OptionNodeArray();
 		// input
-		opt.addOption("i", "input", true, "input file");
-		opt.addOption("t", "input-type", true, "input file type");
-		opt.addOption("p", "input-params", true, "input params");
-		opt.addOption("f", "input-field-mark", true, "input field split mark");
+		ona.add(new OptionNode("i", "input", true, "input file", ""));
+		ona.add(new OptionNode("t", "input-type", true, "input file type", ""));
+		ona.add(new OptionNode("p", "input-params", true, "input params", ""));
+		ona.add(new OptionNode("f", "input-field-mark", true, "input field split mark", ""));
 		// output
-		opt.addOption("o", "output", true, "output file");
-		opt.addOption("T", "output-type", true, "output file type");
-		opt.addOption("P", "output-params", true, "output params");
-		opt.addOption("F", "output-field-mark", true, "output field split mark");
+		ona.add(new OptionNode("o", "output", true, "output file", ""));
+		ona.add(new OptionNode("T", "output-type", true, "output file type", ""));
+		ona.add(new OptionNode("P", "output-params", true, "output params", ""));
+		ona.add(new OptionNode("F", "output-field-mark", true, "output field split mark", ""));
 		// common
-		opt.addOption("C", "table-caption", true, "table cation/title");
-		opt.addOption("H", "table-head", true, "table head");
+		ona.add(new OptionNode("C", "table-caption", true, "table cation/title", ""));
+		ona.add(new OptionNode("H", "table-head", true, "table head", ""));
 		// help
-		opt.addOption("h", "help", false, "Print this usage information");
-		opt.addOption("v", "verbose", false, "Print out VERBOSE information");
+		ona.add(new OptionNode("h", "help", false, "Print this usage information", ""));
+		ona.add(new OptionNode("v", "verbose", false, "Print out VERBOSE information", ""));
+		
+		opt = new Options();
+		ona.fill(opt);
 	}
 	
 	public void parseCommandLine(String[] args) {
@@ -44,19 +87,56 @@ public class TConvOption {
 				showUsage();
 				System.exit(0);
 			}
-			if (cmdline.hasOption('i')) {
-				attrMap.put("input", cmdline.getOptionValue('i'));
-			}
+			
+			// 轮询命令行选项
+			ona.visit(cmdline, attrMap);
 						
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public String query(String attr) {
-		String value = attrMap.get(attr);
-		return value;
+	/*
+	 * input options
+	 */
+	public String getInput() {
+		return query("input");
+	}
+	public String getInputType() {
+		return query("input-type");
+	}
+	public String getInputParams() {
+		return query("input-params");
+	}
+	public String getInputFieldMark() {
+		return query("input-field-mark");
+	}
+	
+	/*
+	 * output options
+	 */
+	public String getOutput() {
+		return query("output");
+	}
+	public String getOutputType() {
+		return query("output-type");
+	}
+	public String getOutputParams() {
+		return query("output-params");
+	}
+	public String getOutputFieldMark() {
+		return query("output-field-mark");
+	}
+	
+	/*
+	 * common in/out options
+	 */
+	public String getTableCaption() {
+		return query("table-caption");
+	}
+	public String[] getTableHead() {
+		String s = query("table-head");
+		return s.split(",");
 	}
 	
 	public void showUsage() {
@@ -65,10 +145,17 @@ public class TConvOption {
 		formatter.printHelp("tconv", opt);
 	}
 	
-	private Options opt;
-	private CommandLine cmdline;
+	public void update(String attr, String value) {
+		attrMap.put(attr, value);
+	}
 	
-	private String caption;
-	private String tabHead;
+	private String query(String attr) {
+		String value = attrMap.get(attr);
+		return value;
+	}
+	
+	private OptionNodeArray 		ona;
+	private Options 				opt;
+	private CommandLine 			cmdline;
 	private HashMap<String, String>	attrMap;
 }
