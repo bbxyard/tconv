@@ -12,7 +12,6 @@ import org.apache.commons.cli.ParseException;
 
 public class TConvOption {
 	public TConvOption(String caption, String tabHead, String extparams) {
-		// TODO Auto-generated constructor stub
 		attrMap = new HashMap<String, String>();
 	}
 	
@@ -46,16 +45,20 @@ public class TConvOption {
 		
 		public void visit(CommandLine cmdline, HashMap<String, String> attrMap) {
 			for (OptionNode node : this) {
-				if (cmdline.hasOption(node.sname) || cmdline.hasOption(node.lname)) {
-					attrMap.put(node.lname, cmdline.getOptionValue(node.lname));
-				} else {
-					attrMap.put(node.lname, node.defValue);
+				String value = node.defValue;
+				if (cmdline.hasOption(node.sname)) {
+					value = cmdline.getOptionValue(node.sname);
+				} else if (cmdline.hasOption(node.lname)) {
+					value = cmdline.getOptionValue(node.lname);
 				}
+				attrMap.put(node.sname, value);
+				attrMap.put(node.lname, value);
 			}			
 		}
 	}
 	
 	public TConvOption() {
+		attrMap = new HashMap<String, String>();
 		ona = new OptionNodeArray();
 		// input
 		ona.add(new OptionNode("i", "input", true, "input file", ""));

@@ -3,6 +3,10 @@ package com.bbxyard.tconv;
 public interface ITConvDocument {
 	
 	public class TConvRow {
+		public TConvRow(String[] items) {
+			this.items = items;
+		}
+		
 		public String[] getItems() {
 			return items;
 		}
