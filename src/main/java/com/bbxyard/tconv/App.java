@@ -1,7 +1,6 @@
 package com.bbxyard.tconv;
 
-import com.bbxyard.tconv.impl.in.CsvInput;
-import com.bbxyard.tconv.impl.out.CsvOutput;
+import com.sun.istack.internal.logging.Logger;
 
 
 /**
@@ -13,10 +12,16 @@ public class App {
 		TConvOption opt = new TConvOption();
 		opt.parseCommandLine(args);
 		
-		CsvInput csvIn = new CsvInput();
-		ITConvDocument doc = csvIn.parseFile(opt.getInput(), opt);
-		CsvOutput csvOut = new CsvOutput();
-		csvOut.saveFile(doc, opt.getOutput(), opt);
+		ITCFactory factory = TConvResMgr.getInst().getFactory();
 		
+		Logger log = Logger.getLogger(App.class);
+		log.info("App start!!");
+		
+		ITConvInput in = factory.createInput(opt.getInputType());
+		ITConvOutput out = factory.createOutput(opt.getOutputType());
+		ITConvDocument doc = in.parseFile(opt.getInput(), opt);
+		out.saveFile(doc, opt.getOutput(), opt);
+
+		log.info("App stop!!");
 	}
 }

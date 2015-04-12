@@ -6,13 +6,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 import com.bbxyard.tconv.ITConvDocument;
 import com.bbxyard.tconv.ITConvDocument.TConvRow;
 import com.bbxyard.tconv.ITConvInput;
 import com.bbxyard.tconv.TConvOption;
 import com.bbxyard.tconv.impl.TConvDocumentImpl;
 
+@Component
 public class CsvInput implements ITConvInput {
+	public CsvInput() {
+		System.out.println(this.getClass().getName());
+	}
 
 	public ITConvDocument parseFile(String file, TConvOption opt) {
 		ITConvDocument doc = new TConvDocumentImpl();

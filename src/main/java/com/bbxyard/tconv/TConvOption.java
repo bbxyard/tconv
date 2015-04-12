@@ -71,6 +71,7 @@ public class TConvOption {
 		ona.add(new OptionNode("P", "output-params", true, "output params", ""));
 		ona.add(new OptionNode("F", "output-field-mark", true, "output field split mark", ""));
 		// common
+		ona.add(new OptionNode("A", "factory-table", true, "facotry table", "factory.csv"));
 		ona.add(new OptionNode("C", "table-caption", true, "table cation/title", ""));
 		ona.add(new OptionNode("H", "table-head", true, "table head", ""));
 		// help
@@ -134,6 +135,9 @@ public class TConvOption {
 	/*
 	 * common in/out options
 	 */
+	public String getFactoryTable() {
+		return query("factory-table");
+	}
 	public String getTableCaption() {
 		return query("table-caption");
 	}
