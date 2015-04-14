@@ -28,7 +28,7 @@ public class CsvInput implements ITConvInput {
 			br = new BufferedReader(new FileReader(f));
 			String line = null;
 			while ( (line = br.readLine()) != null ) {
-				addRow(line, opt.getInputFieldMark(), doc);
+				addRow(line, opt.getInputFieldMark(), doc, opt);
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -46,14 +46,25 @@ public class CsvInput implements ITConvInput {
 		ITConvDocument doc = new TConvDocumentImpl();
 		String[] txt = content.split("\n");
 		for (String line : txt) {
-			addRow(line, opt.getInputFieldMark(), doc);
+			addRow(line, opt.getInputFieldMark(), doc, opt);
 		}
 		return doc;
 	}
 	
-	private static void addRow(String line, String spliter, ITConvDocument doc) {
-		TConvRow row = new TConvRow(line.split(spliter));
-		doc.addRow(row);	
+	private static void addRow(String line, String spliter, ITConvDocument doc, TConvOption opt) {
+		do {
+			// empty str
+			if (line.isEmpty())
+				break;
+			// first char match comment
+			char ch = line.charAt(0);
+			String comment = opt.getInputComment();
+			if (comment.indexOf(ch) >= 0)
+				break;
+			// add
+			TConvRow row = new TConvRow(line.split(spliter));
+			doc.addRow(row);			
+		} while (false);
 	}
 
 	public static void readFileByLines(String fileName) {

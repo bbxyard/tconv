@@ -65,6 +65,7 @@ public class TConvOption {
 		ona.add(new OptionNode("t", "input-type", true, "input file type", ""));
 		ona.add(new OptionNode("p", "input-params", true, "input params", ""));
 		ona.add(new OptionNode("f", "input-field-mark", true, "input field split mark", ""));
+		ona.add(new OptionNode("c", "input-comment", true, "input comment", "#//"));
 		// output
 		ona.add(new OptionNode("o", "output", true, "output file", ""));
 		ona.add(new OptionNode("T", "output-type", true, "output file type", ""));
@@ -115,6 +116,9 @@ public class TConvOption {
 	public String getInputFieldMark() {
 		return query("input-field-mark");
 	}
+	public String getInputComment() {
+		return query("input-comment");
+	}	
 	
 	/*
 	 * output options
