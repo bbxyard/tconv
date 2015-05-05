@@ -1,1 +1,3 @@
 csv:com.bbxyard.tconv.impl.in.CsvInput:com.bbxyard.tconv.impl.out.CsvOutput
+htm:com.bbxyard.tconv.impl.in.HtmlInput:com.bbxyard.tconv.impl.out.HtmlOutput
+html:com.bbxyard.tconv.impl.in.HtmlInput:com.bbxyard.tconv.impl.out.HtmlOutput
